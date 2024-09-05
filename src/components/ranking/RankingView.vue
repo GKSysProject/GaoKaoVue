@@ -1,29 +1,19 @@
 <template>
-  <div class="main">
     <div class="main-table">
-      <div class="select-wrapper">
-        <select v-model="selectedChart" @change="onChartSelected" class="custom-select">
-          <option value="scoreDistribution">一分一段表</option>
-          <option value="admissionPlan">招生计划表</option>
-        </select>
-      </div>
       <div ref="chart" style="width: 600px; height: 400px"></div>
-      <!-- Use the AppNavigation component -->
       <AppNavigation @yearSelected="onYearSelected" />
-      <SchoolMap />
     </div>
-  </div>
 </template>
 
 <script>
 import * as echarts from "echarts";
 import AppNavigation from "./AppNavigation.vue";
-import SchoolMap from "../SchoolMap.vue";
 
 export default {
+  name: "RankingView",
   components: {
     AppNavigation,
-    SchoolMap
+    // SchoolMap
   },
   data() {
     return {

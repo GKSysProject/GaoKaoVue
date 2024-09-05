@@ -1,24 +1,15 @@
 <template>
-  <div id="app">
-    <!-- <router-view /> -->
-    <HomeView/>
-    <!-- <Header />
-    <RankingView />
-    <SchoolList /> -->
-  </div>
+  <HomeView />
 </template>
 
 <script>
-
-import HomeView from "./components/HomeView.vue";
+import HomeView from './components/HomeView.vue';
 export default {
   components: {
-    HomeView
+    HomeView,
   },
-  
 };
 </script>
 
 <style>
-
 </style>

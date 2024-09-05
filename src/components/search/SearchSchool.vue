@@ -1,11 +1,11 @@
 <!-- src/components/SearchSchool.vue -->
 <template>
-    <div>
+    <div :style="{ zIndex: 1000, position: 'relative' }">
       <form id="search">
-        <input id="content" type="text" 
+        <input id="content" type="text" autocomplete="off"
         placeholder="请输入学校名称"
         v-model="searchQuery"
-        v-on:keyup="context()">
+        @keyup="context($event)">
         <button v-on:click="searchButton()">搜索</button>
       </form>
       <div class="suggestions" v-if="suggestions.length > 0">
@@ -29,7 +29,8 @@
     data() {
       return {
         searchQuery: null,
-        suggestions: []
+        suggestions: [],
+        result: [],
       };
     },
     methods: {
@@ -39,21 +40,22 @@
     },
     //搜索功能
     searchButton(){
-        var _this = this;
-        axios.get("http://localhost:8080/schoolInformation?name=" +document.getElementById("content").value).then(function (response){
-            _this.tableData = response.data.data;
-        })
-        
+      this.suggestions = [];
+      this.$emit('search', this.result.data.data);
     },
     //搜索框输入时，显示提示框
-    async context(){
+    async context(event){
       this.suggestions = [];
       if(this.searchQuery != ''){
         const result = await axios.get("http://localhost:8080/search?q="+this.searchQuery);
+        this.result = result;
         for(let i = 0; i < result.data.data.length; i++){
           if(i > 9) break;
-          this.suggestions.push(result.data.data[i]);
+          this.suggestions.push(result.data.data[i].schoolName);
         }
+        if (event.keyCode === 13) {
+        this.suggestions = [];
+      }
       }else{
         this.suggestions = [];
            
@@ -76,13 +78,13 @@
   #search{
     display: flex;
     width: 500px;
-    height: 50px;
+    height: 30px;
     line-height: 50px;
 }
 #search input{
     flex: 1;
-    height: 50px;
-    line-height: 50px;
+    height: 30px;
+    line-height: 30px;
     box-sizing: border-box;
     outline: none;
     border: 1px #00b3ff;
@@ -92,13 +94,13 @@
     transition: all .3s;
 }
 #search button{
-    height: 50px;
-    line-height: 50px;
+    height: 30px;
+    line-height: 30px;
     padding: 0 30px;
     border: none;
     box-sizing: border-box;
     background-color: #00b3ff;
-    font-size: 24px;
+    font-size: 10px;
     color: #fff;
     cursor: pointer;
     border-top-right-radius: 25px;
@@ -109,6 +111,8 @@
 }
 
 .suggestions {
+  text-align: left;
+  font-size: 10px;
   position: absolute;
   width: 380px;
   border: 1px solid #ccc;
